@@ -21,7 +21,7 @@ class MdLog
         if(!$this->channel_config)
             throw new LoggerInvalidException();
 
-        $this->logger = new Logger($channel, [self::getHandler($this->filePath(), $channel)]);
+        $this->logger = new Logger($channel, [self::getHandler($this->filePath(), $this->getAppName())]);
 
         return $this;
     }
@@ -45,5 +45,9 @@ class MdLog
     protected function getHandler(string $file, string $name){
         return (new StreamHandler($file, Logger::INFO))
             ->setFormatter(new LogstashFormatter($name, 'mdr'));
+    }
+
+    protected function getAppName(){
+        return explode('/', app('request')->path())[0] ?? null;
     }
 }
