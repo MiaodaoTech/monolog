@@ -7,11 +7,11 @@ use MdTech\MdLog\Facades\MdLog;
 
 trait HasLog{
 
-    public function log(string $message){
-        MdLog::create($this->getTable())->info($message, Auth::user()->id, $this->id, $this->generateLogData());
+    public function log(string $message, array $addition = []){
+        MdLog::create($this->getTable())->info($message, Auth::user()->id ?? 0, $this->id, $this->generateLogData($addition));
     }
 
-    public function generateLogData(){
-        return $model->toArray();
+    public function generateLogData(array $addition = []){
+        return array_merge($model->toArray(), $addition);
     }
 }
